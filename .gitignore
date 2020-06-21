@@ -3,3 +3,4 @@ depenses.egg-info/
 .tox/
 .pytest_cache/
 *.sw[op]
+*.sqlite3
