@@ -110,5 +110,5 @@ STATIC_URL = "/static/"
 
 # Djanno Money
 
-CURRENCIES = ("USD", "EUR")
-CURRENCY_CHOICES = [("USD", "USD $"), ("EUR", "EUR €")]
+CURRENCIES = ("USD", "EUR", "PLN")
+CURRENCY_CHOICES = [("USD", "USD $"), ("EUR", "EUR €"), ("PLN", "PLN zł")]
