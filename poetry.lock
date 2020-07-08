@@ -120,6 +120,36 @@ exchange = ["certifi"]
 test = ["pytest (>=3.1.0)", "pytest-django", "pytest-pythonpath", "pytest-cov", "django-reversion"]
 
 [[package]]
+category = "main"
+description = "Send emails using Django template system."
+name = "django-templated-mail"
+optional = false
+python-versions = "*"
+version = "1.1.1"
+
+[[package]]
+category = "main"
+description = "Web APIs for Django, made easy."
+name = "djangorestframework"
+optional = false
+python-versions = ">=3.5"
+version = "3.11.0"
+
+[package.dependencies]
+django = ">=1.11"
+
+[[package]]
+category = "main"
+description = "REST version of Django authentication system."
+name = "djoser"
+optional = false
+python-versions = "*"
+version = "2.0.3"
+
+[package.dependencies]
+django-templated-mail = "*"
+
+[[package]]
 category = "dev"
 description = "A platform independent file lock."
 name = "filelock"
@@ -381,7 +411,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "cb2df2cc74a8964cc49ab3835026d70e249a39f4f7101450fad8c85c0a6a073d"
+content-hash = "446debe6c98f6c45599c960693378aa08fe6aeab867e4ff143c5cd9c44b37b93"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -423,6 +453,18 @@ django = [
 django-money = [
     {file = "django-money-1.1.tar.gz", hash = "sha256:06507ac17aa0af548f241838bb0dd646bb5782ff2450be941b040f2857a97c1c"},
     {file = "django_money-1.1-py3-none-any.whl", hash = "sha256:4ad7f5a82ccd24a6c0303173cc773b14cc9a51b3f0e6053bf25354282d1cf16d"},
+]
+django-templated-mail = [
+    {file = "django-templated-mail-1.1.1.tar.gz", hash = "sha256:8db807effebb42a532622e2d142dfd453dafcd0d7794c4c3332acb90656315f9"},
+    {file = "django_templated_mail-1.1.1-py3-none-any.whl", hash = "sha256:f7127e1e31d7cad4e6c4b4801d25814d4b8782627ead76f4a75b3b7650687556"},
+]
+djangorestframework = [
+    {file = "djangorestframework-3.11.0-py3-none-any.whl", hash = "sha256:05809fc66e1c997fd9a32ea5730d9f4ba28b109b9da71fccfa5ff241201fd0a4"},
+    {file = "djangorestframework-3.11.0.tar.gz", hash = "sha256:e782087823c47a26826ee5b6fa0c542968219263fb3976ec3c31edab23a4001f"},
+]
+djoser = [
+    {file = "djoser-2.0.3-py3-none-any.whl", hash = "sha256:e08570cc691caab6bf708e884b98fe3aeda61d5f84eca2d5781dfd9601ee04cf"},
+    {file = "djoser-2.0.3.tar.gz", hash = "sha256:36e06fdfc429a3aa8647289ee0e50806114d89f781de9245a68c6a44575d1bdd"},
 ]
 filelock = [
     {file = "filelock-3.0.12-py3-none-any.whl", hash = "sha256:929b7d63ec5b7d6b71b0fa5ac14e030b3f70b75747cef1b10da9b879fef15836"},
