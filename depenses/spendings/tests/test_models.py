@@ -68,11 +68,14 @@ def test_can_create_settlement():
     member_1 = Member.objects.create(room=room, name="user_1")
     member_2 = Member.objects.create(room=room, name="user_2")
 
-    settlement = Settlement(member=member_1, settlement_with_member=member_2)
+    settlement = Settlement(member=member_1, settlement_with_member=member_2, room=room)
 
     assert settlement.member.room.name == "room name"
     assert settlement.member.name == "user_1"
     assert settlement.settlement_with_member.name == "user_2"
+
+    settlement.save()
+    assert len(room.settlement_set.all()) == 1
 
 
 @pytest.mark.django_db
@@ -83,3 +86,41 @@ def test_cant_create_dept_from_and_to_same_member():
     with pytest.raises(IntegrityError) as e_info:
         Dept.objects.create(from_member=member, to_member=member, amount=Money(10, "USD"), title="dept")
         assert "IntegrityError: CHECK constraint failed" in str(e_info.value)
+
+
+@pytest.mark.django_db
+def test_can_get_last_settlement():
+    room = Room.objects.create(name="room name", currency="USD")
+    member_1 = Member.objects.create(room=room, name="user_1")
+    member_2 = Member.objects.create(room=room, name="user_2")
+
+    Settlement.objects.create(member=member_1, settlement_with_member=member_2, room=room)
+    settlement_2 = Settlement.objects.create(member=member_1, settlement_with_member=member_2, room=room)
+
+    assert len(room.settlement_set.all()) == 2
+    assert room.get_last_settlement() == settlement_2
+
+
+@pytest.mark.django_db
+def test_can_get_spendings_after_last_settlement():
+    room = Room.objects.create(name="room name", currency="USD")
+    member_1 = Member.objects.create(room=room, name="user_1")
+    member_2 = Member.objects.create(room=room, name="user_2")
+
+    Settlement.objects.create(member=member_1, settlement_with_member=member_2, room=room)
+    Spending.objects.create(member=member_1, title="some title", amount=Money(42, "USD"), room=room)
+    Dept.objects.create(title="dept", to_member=member_1, from_member=member_2, amount=Money(10, "USD"), room=room)
+
+    Settlement.objects.create(member=member_1, settlement_with_member=member_2, room=room)
+    spending = Spending.objects.create(member=member_1, title="some title", amount=Money(55, "USD"), room=room)
+    dept = Dept.objects.create(
+        title="dept", to_member=member_1, from_member=member_2, amount=Money(100, "USD"), room=room
+    )
+
+    assert len(room.settlement_set.all()) == 2
+    assert len(room.spending_set.all()) == 2
+    assert len(room.dept_set.all()) == 2
+
+    last_settlement = room.get_last_settlement()
+    assert list(room.get_spendings_after(last_settlement.date)) == [spending]
+    assert list(room.get_depts_after(last_settlement.date)) == [dept]
