@@ -21,4 +21,4 @@ def test_can_get_spendings_after_last_settlement():
 
     service = RoomStateService(room)
     state = service.calculate_room_state()
-    assert state == {member_2: {member_1: Money(0, "USD")}, member_1: {member_2: Money(75, "USD")}}
+    assert state.state == {member_2: {member_1: Money(0, "USD")}, member_1: {member_2: Money(75, "USD")}}

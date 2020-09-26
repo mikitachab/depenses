@@ -12,10 +12,10 @@ class Room(models.Model):
         return self.settlement_set.order_by("-date").first()
 
     def get_spendings_after(self, date):
-        return self.spending_set.filter(date__gt=date).all()
+        return self.spending_set.filter(date__gt=date).all() if date else self.spending_set.all()
 
     def get_depts_after(self, date):
-        return self.dept_set.filter(date__gt=date).all()
+        return self.dept_set.filter(date__gt=date).all() if date else self.dept_set.all()
 
 
 class Member(models.Model):

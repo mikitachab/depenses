@@ -2,6 +2,10 @@ class RestApiWrapper:
     def __init__(self, client):
         self.client = client
 
+    def get_room_state(self, room_id):
+        url = _make_api_url("room-state")
+        return self.client.get(url + f"{room_id}/").json()
+
     def __getattr__(self, name):
         endpoint = _make_endpoint(name)
 
