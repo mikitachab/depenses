@@ -6,10 +6,14 @@ from spendings.services import RoomStateService
 
 
 @pytest.mark.django_db
-def test_can_get_spendings_after_last_settlement():
+def test_can_get_spendings_after_last_settlement(django_user_model):
     room = Room.objects.create(name="room name", currency="USD")
-    member_1 = Member.objects.create(room=room, name="user_1")
-    member_2 = Member.objects.create(room=room, name="user_2")
+
+    user_1 = django_user_model.objects.create(username="user_1")
+    user_2 = django_user_model.objects.create(username="user_2")
+
+    member_1 = Member.objects.create(room=room, user=user_1)
+    member_2 = Member.objects.create(room=room, user=user_2)
 
     Settlement.objects.create(member=member_1, settlement_with_member=member_2, room=room)
     Spending.objects.create(member=member_1, title="some title", amount=Money(42, "USD"), room=room)

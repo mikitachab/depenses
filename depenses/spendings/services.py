@@ -57,6 +57,8 @@ class RoomState:
 
     def to_json(self):
         return {
-            member.name: {other_member.name: dept.amount for other_member, dept in members_depts.items()}
+            member.user.username: {
+                other_member.user.username: dept.amount for other_member, dept in members_depts.items()
+            }
             for member, members_depts in self._state.items()
         }
