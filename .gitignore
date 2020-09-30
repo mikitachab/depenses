@@ -1,4 +1,5 @@
 .venv/
+venv/
 depenses.egg-info/
 .tox/
 .pytest_cache/
