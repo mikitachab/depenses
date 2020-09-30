@@ -40,6 +40,10 @@ class Spending(models.Model):
     member = models.ForeignKey("Member", on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now=True)
 
+    def save(self, *args, **kwargs):
+        self.amount_currency = self.room.currency
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.title
 
@@ -54,6 +58,10 @@ class Dept(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        self.amount_currency = self.room.currency
+        super().save(*args, **kwargs)
 
     class Meta:
         constraints = [

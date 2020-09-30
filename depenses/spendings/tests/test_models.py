@@ -95,7 +95,7 @@ def test_cant_create_dept_from_and_to_same_member():
     member = Member.objects.create(room=room, user=user)
 
     with pytest.raises(IntegrityError) as e_info:
-        Dept.objects.create(from_member=member, to_member=member, amount=Money(10, "USD"), title="dept")
+        Dept.objects.create(from_member=member, to_member=member, amount=Money(10, "USD"), title="dept", room=room)
         assert "IntegrityError: CHECK constraint failed" in str(e_info.value)
 
 
