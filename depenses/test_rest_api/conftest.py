@@ -1,5 +1,6 @@
 import pytest
 
+from spendings.models import Room
 from .rest_api_wrapper import RestApiWrapper
 
 
@@ -16,3 +17,10 @@ def logged_in_client(client, django_user_model):
 @pytest.fixture
 def logged_in_api_client(logged_in_client):
     return RestApiWrapper(logged_in_client)
+
+
+@pytest.fixture
+def room():
+    name = "test"
+    currency = "USD"
+    return Room(name=name, currency=currency)
