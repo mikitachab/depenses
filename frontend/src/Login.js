@@ -74,7 +74,9 @@ class Login extends React.Component {
                                     <button className="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">Sign in</button>
 
                                     <p>Not a member?
-                  <a href=""> Register</a>
+                                        <a href="">
+                                            Register
+                                        </a>
                                     </p>
                                 </form>
                             </div>

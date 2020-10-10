@@ -17,10 +17,11 @@
 }
 
 .mainpage{
+  background-color: #818c9654;
   .row{
     width: 100%;
     min-height: 100vh;
-    div{
+    .content-row{
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -30,21 +31,23 @@
         align-items: center;
       }
       .card-item{
-        border-radius: 10px;
-        margin: 1em;
-        box-shadow: 0px -1px 6px 0px rgba(0,0,0,0.75);
+        border-radius: 15px;
+        margin: 1em 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
         p{
-          text-align: center;
           font-weight: 600;
-          font-size: 24px;
+          font-size: 28px;
         }
-        span{
-          margin-left: 20px;
+        .price{
+          color: rgb(252, 40, 40);
         }
       }
     }
     .history{
-      max-height: 70vh;
+      max-height: 70vh;;
       overflow: auto;
       .history-item{
         display: flex;
