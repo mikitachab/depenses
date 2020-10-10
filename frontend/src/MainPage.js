@@ -1,8 +1,9 @@
 import React from 'react';
-import './App.css';
 import CardWithExpenses from './components/mainpage/CardWithExpenses';
-import HistoryItem from './components/mainpage/HistoryItem';
-import axios from 'axios'
+import axios from 'axios';
+import History from './History';
+import NavBarComponent from './NavBarComponent';
+import AddNewExpanse from './AddNewExpanse';
 
 class MainPage extends React.Component {
     constructor() {
@@ -14,7 +15,7 @@ class MainPage extends React.Component {
 
         this.createHistoryEl = this.createHistoryEl.bind(this);
         this.onInputChange = this.onInputChange.bind(this);
-        this.getCurrentDate = this.getCurrentDate.bind(this)
+        this.getDate = this.getDate.bind(this);
     }
 
     onInputChange(e) {
@@ -26,7 +27,7 @@ class MainPage extends React.Component {
         e.preventDefault();
 
         this.setState({
-            expenseData: [...this.state.expenseData, { member: 'Ala', amount: this.state.inputExpanse, date: this.getCurrentDate() }]
+            expenseData: [...this.state.expenseData, { member: 'Ala', amount: this.state.inputExpanse, date: new Date }]
         })
 
         axios.post(`http://127.0.0.1:8000/api/v1/spendings/`,
@@ -57,46 +58,41 @@ class MainPage extends React.Component {
         })
     }
 
-    getCurrentDate() {
-        let newDate = new Date();
-        let date = newDate.getDate();
-        let month = newDate.getMonth();
-        let year = newDate.getFullYear();
+    getDate(date) {
+        var newDate = new Date(date);
 
-        return `${date > 10 ? `${date}` : `0${date}`}.${month > 10 ? `${month}` : `0${month}`}.${year}`
+        var day = newDate.getDate().toString();
+        var month = newDate.getMonth().toString();
+        var year = newDate.getFullYear().toString();
+
+        return `${day.padStart(2, '0')}.${month.padStart(2, '0')}.${year.padStart(2, '0')}`;
     }
+
 
 
     render() {
         return (
-            <div className="container-fluid" >
-                <div className="container mainpage" >
-                    <div className="row">
-                        <div className="col-4">
-                            <div className="card-expenses">
-                                <CardWithExpenses />
-                                <CardWithExpenses />
+            <div>
+                <NavBarComponent />
+                <div className="container-fluid mainpage" >
+                    <div className="container" >
+                        <div className="row">
+                            <div className="col-5 content-row">
+                                <h1>Expanses for room Czebotodrel</h1>
+                                <div className="card-expenses">
+                                    <CardWithExpenses />
+                                    <CardWithExpenses />
+                                </div>
+                            </div>
+                            <div className="col-7 content-row">
+                                <h1>Your History Expanses</h1>
+                                <AddNewExpanse createHistoryEl={this.createHistoryEl} onInputChange={this.onInputChange} />
+                                <History expenseData={this.state.expenseData} getDate={this.getDate} />
                             </div>
                         </div>
-                        <div className="col-8">
-                            <div className="add-new-expense">
-                                <form className="text-center" action="#!" onSubmit={this.createHistoryEl}>
-                                    <input className="form-control" onChange={this.onInputChange} type="number" id="input-to-add-expenses" />
-                                    <button className="add-btn btn btn-dark my-2">Add</button>
-                                </form>
-                            </div>
-                            <div className="history">
-                                {this.state.expenseData.map((el, i) => {
-                                    return <HistoryItem name={el.member}
-                                        key={i}
-                                        price={el.amount}
-                                        dateDetails={el.date} />
-                                })}
-                            </div>
-                        </div>
-                    </div>
+                    </div >
                 </div >
-            </div >
+            </div>
 
         );
     }

@@ -1,8 +1,8 @@
 import React from 'react';
-import './styles/main.scss';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from './Login';
 import MainPage from './MainPage';
+import './styles/main.scss';
 
 class App extends React.Component {
   render() {

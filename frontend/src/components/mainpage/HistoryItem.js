@@ -1,18 +1,15 @@
 import React from 'react';
+import { ListGroup } from 'react-bootstrap';
 
 class HistoryItem extends React.Component {
-    constructor() {
-        super();
-    }
-
-
     render() {
         return (
-            <div className="history-item">
-                <span className="history-item-price">{this.props.price}</span>
-                <p className="history-item-buyer">{this.props.name}</p>
-                <span className="history-item-date">{this.props.dateDetails}</span>
-            </div>
+            <ListGroup>
+                <ListGroup.Item className="history-item"><span className="history-item-price">{this.props.price}</span>
+                    <p className="history-item-buyer">{this.props.name}</p>
+                    <span className="history-item-date">{this.props.dateDetails}</span></ListGroup.Item>
+
+            </ListGroup>
         )
     }
 
