@@ -27,6 +27,7 @@ urlpatterns = [
     path("api/v1/room/<int:room_id>/state/", room_views.room_state),
     path("api/v1/room/<int:room_id>/spendings/", room_views.room_spendings),
     path("api/v1/room/<int:room_id>/depts/", room_views.room_depts),
+    path("api/v1/room/<int:room_id>/settlements/", room_views.room_settlements),
     path("api/v1/", include(router.urls)),
     path("api/auth/", include("djoser.urls.authtoken")),
 ]
