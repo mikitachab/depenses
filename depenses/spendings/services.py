@@ -33,7 +33,7 @@ class RoomStateService:
         result = dict(current_result)
         for m in self.members:
             for k, amount in result[m].items():
-                if amount > result[k][m]:
+                if amount.amount > result[k][m]:
                     result[m][k] -= result[k][m]
                     result[k][m] = self._room_zero
                 else:

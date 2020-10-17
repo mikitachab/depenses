@@ -27,7 +27,7 @@ class Member(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.user.username
+        return self.name
 
     class Meta:
         unique_together = ("room", "user")
