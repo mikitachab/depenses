@@ -7,8 +7,8 @@ class RestApiWrapper:
         return self.client.user
 
     def get_room_state(self, room_id):
-        url = _make_api_url("room-state")
-        return self.client.get(url + f"{room_id}/").json()
+        url = _make_api_url(f"room/{room_id}/state")
+        return self.client.get(url).json()
 
     def __getattr__(self, name):
         endpoint = _make_endpoint(name)

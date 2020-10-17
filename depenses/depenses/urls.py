@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from spendings.api_views import room_state
+import spendings.room_api_views as room_views
 
 from .api import router
 
@@ -24,7 +24,10 @@ from .api import router
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("spendings.urls")),
-    path("api/v1/room-state/<int:room_id>/", room_state),
+    path("api/v1/room/<int:room_id>/state/", room_views.room_state),
+    path("api/v1/room/<int:room_id>/spendings/", room_views.room_spendings),
+    path("api/v1/room/<int:room_id>/depts/", room_views.room_depts),
+    path("api/v1/room/<int:room_id>/settlements/", room_views.room_settlements),
     path("api/v1/", include(router.urls)),
     path("api/auth/", include("djoser.urls.authtoken")),
 ]

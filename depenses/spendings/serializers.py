@@ -16,12 +16,17 @@ class MemberSerializer(serializers.ModelSerializer):
 
 
 class SpengingSerializer(serializers.ModelSerializer):
+    member_name = serializers.CharField(source="member.name", read_only=True)
+
     class Meta:
         model = models.Spending
         fields = "__all__"
 
 
 class DeptSerializer(serializers.ModelSerializer):
+    from_member_name = serializers.CharField(source="from_member.name", read_only=True)
+    to_member_name = serializers.CharField(source="to_member.name", read_only=True)
+
     class Meta:
         model = models.Dept
         fields = "__all__"

@@ -1,10 +1,7 @@
 from rest_framework import viewsets
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
 
 from spendings import models
 from spendings import serializers
-from spendings.services import RoomStateService
 
 
 class RoomViewSet(viewsets.ModelViewSet):
@@ -30,12 +27,3 @@ class DeptViewSet(viewsets.ModelViewSet):
 class SettlementViewSet(viewsets.ModelViewSet):
     queryset = models.Settlement.objects.all()
     serializer_class = serializers.SettlementSerializer
-
-
-@api_view()
-def room_state(request, room_id):
-    room = models.Room.objects.filter(id=room_id).first()
-
-    room_state_service = RoomStateService(room)
-    _room_state = room_state_service.calculate_room_state()
-    return Response(_room_state.to_json())
