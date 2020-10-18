@@ -22,6 +22,11 @@ class SpengingSerializer(serializers.ModelSerializer):
         model = models.Spending
         fields = "__all__"
 
+    def validate(self, attrs):
+        instance = models.Spending(**attrs)
+        instance.full_clean()
+        return attrs
+
 
 class DeptSerializer(serializers.ModelSerializer):
     from_member_name = serializers.CharField(source="from_member.name", read_only=True)
@@ -31,8 +36,20 @@ class DeptSerializer(serializers.ModelSerializer):
         model = models.Dept
         fields = "__all__"
 
+    def validate(self, attrs):
+        if attrs["from_member"] == attrs["to_member"]:
+            raise serializers.ValidationError("debt cannot be from and to the same member")
+        instance = models.Dept(**attrs)
+        instance.full_clean()
+        return attrs
+
 
 class SettlementSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Settlement
         fields = "__all__"
+
+    def validate(self, attrs):
+        instance = models.Settlement(**attrs)
+        instance.full_clean()
+        return attrs

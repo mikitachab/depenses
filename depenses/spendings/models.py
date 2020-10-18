@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q, F
 from djmoney.models.fields import MoneyField
@@ -30,20 +31,20 @@ class Member(models.Model):
         return self.name
 
     class Meta:
-        unique_together = ("room", "user")
+        unique_together = [("room", "user"), ("room", "name")]
 
 
 class Spending(models.Model):
     title = models.CharField(max_length=100)
     room = models.ForeignKey("Room", on_delete=models.CASCADE, null=False)
     amount = MoneyField(max_digits=14, decimal_places=2, default_currency="USD")
-    title = models.CharField(max_length=100)
     member = models.ForeignKey("Member", on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now=True)
 
-    def save(self, *args, **kwargs):
+    def clean(self):
+        if self.member not in self.room.member_set.all():
+            raise ValidationError("member is not part of a room")
         self.amount_currency = self.room.currency
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -60,9 +61,13 @@ class Dept(models.Model):
     def __str__(self):
         return self.title
 
-    def save(self, *args, **kwargs):
+    def clean(self):
+        if self.from_member not in self.room.member_set.all():
+            raise ValidationError("from_member is not part of a room")
+        if self.to_member not in self.room.member_set.all():
+            raise ValidationError("to_member is not part of a room")
+
         self.amount_currency = self.room.currency
-        super().save(*args, **kwargs)
 
     class Meta:
         constraints = [
@@ -78,3 +83,9 @@ class Settlement(models.Model):
 
     def __str__(self):
         return str(self.member)
+
+    def clean(self):
+        if self.member not in self.room.member_set.all():
+            raise ValidationError("member is not part of a room")
+        if self.settlement_with_member not in self.room.member_set.all():
+            raise ValidationError("settlement_with_member is not part of a room")
