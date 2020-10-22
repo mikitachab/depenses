@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 import spendings.room_api_views as room_views
+from spendings.history_api_view import room_history as history_view
 
 from .api import router
 
@@ -28,6 +29,8 @@ urlpatterns = [
     path("api/v1/room/<int:room_id>/spendings/", room_views.room_spendings),
     path("api/v1/room/<int:room_id>/depts/", room_views.room_depts),
     path("api/v1/room/<int:room_id>/settlements/", room_views.room_settlements),
+    path("api/v1/room/<int:room_id>/members/", room_views.room_members),
+    path("api/v1/room/<int:room_id>/history/", history_view),
     path("api/v1/", include(router.urls)),
     path("api/auth/", include("djoser.urls.authtoken")),
 ]

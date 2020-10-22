@@ -38,6 +38,15 @@ def room_settlements(request, room_id):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
+def room_members(request, room_id):
+    room = get_object_or_404(models.Room, pk=room_id)
+    check_room_member(request.user, room)
+    spendings = room.member_set.all()
+    return Response([serializers.MemberSerializer(s).data for s in spendings])
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def room_state(request, room_id):
     room = get_object_or_404(models.Room, pk=room_id)
     check_room_member(request.user, room)

@@ -17,71 +17,107 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Member',
+            name="Member",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("name", models.CharField(max_length=100)),
             ],
         ),
         migrations.CreateModel(
-            name='Room',
+            name="Room",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('currency', models.CharField(choices=[('EUR', 'EUR €'), ('PLN', 'PLN zł'), ('USD', 'USD $')], max_length=3)),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("name", models.CharField(max_length=50)),
+                (
+                    "currency",
+                    models.CharField(choices=[("EUR", "EUR €"), ("PLN", "PLN zł"), ("USD", "USD $")], max_length=3),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Spending',
+            name="Spending",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('amount_currency', djmoney.models.fields.CurrencyField(choices=[('EUR', 'EUR €'), ('PLN', 'PLN zł'), ('USD', 'USD $')], default='USD', editable=False, max_length=3)),
-                ('amount', djmoney.models.fields.MoneyField(decimal_places=2, default_currency='USD', max_digits=14)),
-                ('title', models.CharField(max_length=100)),
-                ('date', models.DateTimeField(auto_now=True)),
-                ('member', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='spendings.member')),
-                ('room', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='spendings.room')),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                (
+                    "amount_currency",
+                    djmoney.models.fields.CurrencyField(
+                        choices=[("EUR", "EUR €"), ("PLN", "PLN zł"), ("USD", "USD $")],
+                        default="USD",
+                        editable=False,
+                        max_length=3,
+                    ),
+                ),
+                ("amount", djmoney.models.fields.MoneyField(decimal_places=2, default_currency="USD", max_digits=14)),
+                ("title", models.CharField(max_length=100)),
+                ("date", models.DateTimeField(auto_now=True)),
+                ("member", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="spendings.member")),
+                ("room", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="spendings.room")),
             ],
         ),
         migrations.CreateModel(
-            name='Settlement',
+            name="Settlement",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateTimeField(auto_now=True)),
-                ('member', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='spendings.member')),
-                ('room', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='spendings.room')),
-                ('settlement_with_member', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='settlements_with', to='spendings.member')),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("date", models.DateTimeField(auto_now=True)),
+                ("member", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="spendings.member")),
+                ("room", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="spendings.room")),
+                (
+                    "settlement_with_member",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="settlements_with",
+                        to="spendings.member",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='member',
-            name='room',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='spendings.room'),
+            model_name="member",
+            name="room",
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="spendings.room"),
         ),
         migrations.AddField(
-            model_name='member',
-            name='user',
+            model_name="member",
+            name="user",
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
         migrations.CreateModel(
-            name='Dept',
+            name="Dept",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=100)),
-                ('amount_currency', djmoney.models.fields.CurrencyField(choices=[('EUR', 'EUR €'), ('PLN', 'PLN zł'), ('USD', 'USD $')], default='USD', editable=False, max_length=3)),
-                ('amount', djmoney.models.fields.MoneyField(decimal_places=2, default_currency='USD', max_digits=14)),
-                ('date', models.DateTimeField(auto_now=True)),
-                ('from_member', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='depts_from', to='spendings.member')),
-                ('room', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='spendings.room')),
-                ('to_member', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='depts_to', to='spendings.member')),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("title", models.CharField(max_length=100)),
+                (
+                    "amount_currency",
+                    djmoney.models.fields.CurrencyField(
+                        choices=[("EUR", "EUR €"), ("PLN", "PLN zł"), ("USD", "USD $")],
+                        default="USD",
+                        editable=False,
+                        max_length=3,
+                    ),
+                ),
+                ("amount", djmoney.models.fields.MoneyField(decimal_places=2, default_currency="USD", max_digits=14)),
+                ("date", models.DateTimeField(auto_now=True)),
+                (
+                    "from_member",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, related_name="depts_from", to="spendings.member"
+                    ),
+                ),
+                ("room", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="spendings.room")),
+                (
+                    "to_member",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, related_name="depts_to", to="spendings.member"
+                    ),
+                ),
             ],
         ),
-        migrations.AlterUniqueTogether(
-            name='member',
-            unique_together={('room', 'user')},
-        ),
+        migrations.AlterUniqueTogether(name="member", unique_together={("room", "user")},),
         migrations.AddConstraint(
-            model_name='dept',
-            constraint=models.CheckConstraint(check=models.Q(_negated=True, from_member_id=django.db.models.expressions.F('to_member_id')), name='not_from_to_same_member'),
+            model_name="dept",
+            constraint=models.CheckConstraint(
+                check=models.Q(_negated=True, from_member_id=django.db.models.expressions.F("to_member_id")),
+                name="not_from_to_same_member",
+            ),
         ),
     ]
