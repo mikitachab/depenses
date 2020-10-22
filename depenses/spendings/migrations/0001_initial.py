@@ -112,7 +112,10 @@ class Migration(migrations.Migration):
                 ),
             ],
         ),
-        migrations.AlterUniqueTogether(name="member", unique_together={("room", "user")},),
+        migrations.AlterUniqueTogether(
+            name="member",
+            unique_together={("room", "user")},
+        ),
         migrations.AddConstraint(
             model_name="dept",
             constraint=models.CheckConstraint(

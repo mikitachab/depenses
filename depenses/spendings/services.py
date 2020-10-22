@@ -33,7 +33,7 @@ class RoomStateService:
         result = dict(current_result)
         for m in self.members:
             for k, amount in result[m].items():
-                if amount.amount > result[k][m]:
+                if amount > result[k][m]:
                     result[m][k] -= result[k][m]
                     result[k][m] = self._room_zero
                 else:
@@ -41,8 +41,11 @@ class RoomStateService:
                     result[m][k] = self._room_zero
         return result
 
+    def make_zero(self):
+        return Money(0, self.room.currency)
+
     def calculate_room_state(self):
-        result = {member: defaultdict(int) for member in self.members}
+        result = {member: defaultdict(self.make_zero) for member in self.members}
         pipeline = make_pipeline([self.add_spendgins, self.add_depts, self.reduce_depts])
         return RoomState(pipeline(result))
 
@@ -57,8 +60,6 @@ class RoomState:
 
     def to_json(self):
         return {
-            member.user.username: {
-                other_member.user.username: dept.amount for other_member, dept in members_depts.items()
-            }
+            member.name: {other_member.name: dept.amount for other_member, dept in members_depts.items()}
             for member, members_depts in self._state.items()
         }
