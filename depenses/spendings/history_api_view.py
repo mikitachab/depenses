@@ -3,16 +3,16 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
-from spendings.member_check import check_room_member
+from spendings.member_check import check_member
 from spendings import serializers
 from spendings import models
 
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
+@check_member
 def room_history(request, room_id):
     room = get_object_or_404(models.Room, pk=room_id)
-    check_room_member(request.user, room)
 
     depts = list(room.dept_set.all())
     spendings = list(room.spending_set.all())

@@ -65,8 +65,7 @@ def test_can_get_room_state(logged_in_api_client, django_user_model, room):
     assert room_state == {"test_1": {"test_2": 0.0}, "test_2": {"test_1": 15.0}}
 
 
-# TODO{mikitachab} fix test name
-def test_can_get_room_state_2(logged_in_api_client, django_user_model, room):
+def test_can_get_room_state_one_spending(logged_in_api_client, django_user_model, room):
     logged_in_api_client.create_room(name=room.name, currency=room.currency)
 
     user_1 = logged_in_api_client.user
