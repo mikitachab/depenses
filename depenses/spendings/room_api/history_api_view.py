@@ -1,19 +1,13 @@
-from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
-from spendings.member_check import check_member
 from spendings import serializers
 from spendings import models
+from spendings.room_api.room_endpoint import room_endpoint
 
 
-@api_view(["GET"])
-@permission_classes([IsAuthenticated])
-@check_member
-def room_history(request, room_id):
-    room = get_object_or_404(models.Room, pk=room_id)
-
+@room_endpoint(["GET"], [IsAuthenticated])
+def room_history(request, room):
     depts = list(room.dept_set.all())
     spendings = list(room.spending_set.all())
     settlements = list(room.settlement_set.all())
