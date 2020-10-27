@@ -1,7 +1,9 @@
+from django.http import HttpResponseServerError
+
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from spendings import serializers
+from spendings import serializers, models
 from spendings.services import RoomStateService
 from spendings.room_api.room_endpoint import room_endpoint
 
@@ -35,3 +37,13 @@ def room_state(request, room):
     room_state_service = RoomStateService(room)
     _room_state = room_state_service.calculate_room_state()
     return Response(_room_state.to_json())
+
+
+@room_endpoint(["GET"], [IsAuthenticated])
+def room_member(request, room):
+    member = models.Member.objects.filter(user=request.user, room=room).first()
+    if not member:
+        return HttpResponseServerError()
+    data = serializers.MemberSerializer(member).data
+    data["user"] = {"username": request.user.username}
+    return Response(data)
