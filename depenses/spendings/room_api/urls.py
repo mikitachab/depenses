@@ -10,4 +10,5 @@ urlpatterns = [
     path("<int:room_id>/members/", views.room_members),
     path("<int:room_id>/me/", views.room_member),
     path("<int:room_id>/history/", views.room_history),
+    path("<int:room_id>/data/", views.room_data),
 ]
