@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 from spendings import serializers, models
-from spendings.services import RoomStateService
+from spendings.services import RoomStateService, RoomHistoryService
 from spendings.room_api.room_endpoint import room_endpoint
 
 
@@ -37,6 +37,13 @@ def room_state(request, room):
     room_state_service = RoomStateService(room)
     _room_state = room_state_service.calculate_room_state()
     return Response(_room_state.to_json())
+
+
+@room_endpoint(["GET"], [IsAuthenticated])
+def room_history(request, room):
+    room_history_service = RoomHistoryService(room)
+    _room_history = room_history_service.get_history()
+    return Response(_room_history.to_json())
 
 
 @room_endpoint(["GET"], [IsAuthenticated])
