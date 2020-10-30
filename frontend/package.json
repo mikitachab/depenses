@@ -23,7 +23,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start-dev-server": "cd ../depenses && python manage.py migrate && python manage.py runserver"
+    "start-dev-server": "cd ../depenses && python manage.py migrate && python manage.py runserver",
+    "lint": "eslint ."
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -43,5 +44,9 @@
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^7.12.1",
+    "typescript": "^4.0.5"
+  }
 }
