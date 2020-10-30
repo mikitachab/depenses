@@ -10,6 +10,10 @@ class RestApiWrapper:
         url = _make_api_url(f"room/{room_id}/state")
         return self.client.get(url).json()
 
+    def get_room_history(self, room_id):
+        url = _make_api_url(f"room/{room_id}/history")
+        return self.client.get(url).json()
+
     def __getattr__(self, name):
         endpoint = _make_endpoint(name)
 

@@ -61,7 +61,7 @@ def room_data(request, room):
     member = models.Member.objects.filter(user=request.user, room=room).first()
     if not member:
         return HttpResponseServerError()
-    member_data = data = serializers.MemberSerializer(member).data
+    member_data = serializers.MemberSerializer(member).data
     member_data["user"] = {"username": request.user.username}
 
     room_state_service = RoomStateService(room)
