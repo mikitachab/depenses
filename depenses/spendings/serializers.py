@@ -45,6 +45,9 @@ class DeptSerializer(serializers.ModelSerializer):
 
 
 class SettlementSerializer(serializers.ModelSerializer):
+    settlement_with_member_name = serializers.CharField(source="settlement_with_member.name", read_only=True)
+    member_name = serializers.CharField(source="member.name", read_only=True)
+
     class Meta:
         model = models.Settlement
         fields = "__all__"
