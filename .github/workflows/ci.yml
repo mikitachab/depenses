@@ -2,7 +2,7 @@ name: CI with tox
 on: [push]
 
 jobs:
-  test:
+  api-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,7 +18,7 @@ jobs:
     - name: Run tests
       run: tox -e test
 
-  linter:
+  py-linter:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -32,3 +32,17 @@ jobs:
       - name: Run linter
         run: |
           tox -e lint
+
+  js-linter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Set up NodeJS
+        uses: actions/setup-node@v1
+      - name: Install deps
+        working-directory: frontend
+        run: npm install
+      - name: Run linter
+        working-directory: frontend
+        run: npm run lint
