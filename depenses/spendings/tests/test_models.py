@@ -34,8 +34,8 @@ def test_can_create_room_with_2_members():
     room = Room.objects.create(name="room name", currency="USD")
     user_1 = get_user_model().objects.create(username="testuser_1")
     user_2 = get_user_model().objects.create(username="testuser_2")
-    member_1 = Member.objects.create(room=room, user=user_1)
-    member_2 = Member.objects.create(room=room, user=user_2)
+    member_1 = Member.objects.create(room=room, user=user_1, name="name_1")
+    member_2 = Member.objects.create(room=room, user=user_2, name="name_2")
 
     assert room.member_set.count() == 2
     assert member_1.room == member_2.room
@@ -59,8 +59,8 @@ def test_can_create_dept():
     room = Room.objects.create(name="room name", currency="USD")
     user_1 = get_user_model().objects.create(username="testuser_1")
     user_2 = get_user_model().objects.create(username="testuser_2")
-    member_1 = Member.objects.create(room=room, user=user_1)
-    member_2 = Member.objects.create(room=room, user=user_2)
+    member_1 = Member.objects.create(room=room, user=user_1, name="name_1")
+    member_2 = Member.objects.create(room=room, user=user_2, name="name_2")
 
     dept = Dept(title="dept", to_member=member_1, from_member=member_2, amount=Money(10, "USD"))
 
@@ -75,8 +75,8 @@ def test_can_create_settlement():
     room = Room.objects.create(name="room name", currency="USD")
     user_1 = get_user_model().objects.create(username="testuser_1")
     user_2 = get_user_model().objects.create(username="testuser_2")
-    member_1 = Member.objects.create(room=room, user=user_1)
-    member_2 = Member.objects.create(room=room, user=user_2)
+    member_1 = Member.objects.create(room=room, user=user_1, name="name_1")
+    member_2 = Member.objects.create(room=room, user=user_2, name="name_2")
 
     settlement = Settlement(member=member_1, settlement_with_member=member_2, room=room)
 
@@ -100,12 +100,23 @@ def test_cant_create_dept_from_and_to_same_member():
 
 
 @pytest.mark.django_db
+def test_cant_create_settlement_with_same_member():
+    room = Room.objects.create(name="room name", currency="USD")
+    user = get_user_model().objects.create(username="testuser")
+    member = Member.objects.create(room=room, user=user)
+
+    with pytest.raises(IntegrityError) as e_info:
+        Settlement.objects.create(settlement_with_member=member, member=member, room=room)
+        assert "IntegrityError: CHECK constraint failed" in str(e_info.value)
+
+
+@pytest.mark.django_db
 def test_can_get_last_settlement():
     room = Room.objects.create(name="room name", currency="USD")
     user_1 = get_user_model().objects.create(username="testuser_1")
     user_2 = get_user_model().objects.create(username="testuser_2")
-    member_1 = Member.objects.create(room=room, user=user_1)
-    member_2 = Member.objects.create(room=room, user=user_2)
+    member_1 = Member.objects.create(room=room, user=user_1, name="name_1")
+    member_2 = Member.objects.create(room=room, user=user_2, name="name_2")
 
     Settlement.objects.create(member=member_1, settlement_with_member=member_2, room=room)
     settlement_2 = Settlement.objects.create(member=member_1, settlement_with_member=member_2, room=room)
@@ -119,8 +130,8 @@ def test_can_get_spendings_after_last_settlement():
     room = Room.objects.create(name="room name", currency="USD")
     user_1 = get_user_model().objects.create(username="testuser_1")
     user_2 = get_user_model().objects.create(username="testuser_2")
-    member_1 = Member.objects.create(room=room, user=user_1)
-    member_2 = Member.objects.create(room=room, user=user_2)
+    member_1 = Member.objects.create(room=room, user=user_1, name="name_1")
+    member_2 = Member.objects.create(room=room, user=user_2, name="name_2")
 
     Settlement.objects.create(member=member_1, settlement_with_member=member_2, room=room)
     Spending.objects.create(member=member_1, title="some title", amount=Money(42, "USD"), room=room)

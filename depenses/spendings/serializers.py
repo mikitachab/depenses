@@ -14,6 +14,11 @@ class MemberSerializer(serializers.ModelSerializer):
         model = models.Member
         fields = "__all__"
 
+    def validate(self, attrs):
+        instance = models.Member(**attrs)
+        instance.full_clean()
+        return attrs
+
 
 class SpengingSerializer(serializers.ModelSerializer):
     member_name = serializers.CharField(source="member.name", read_only=True)
@@ -53,6 +58,8 @@ class SettlementSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def validate(self, attrs):
+        if attrs["member"] == attrs["settlement_with_member"]:
+            raise serializers.ValidationError("can't settlement with same member")
         instance = models.Settlement(**attrs)
         instance.full_clean()
         return attrs

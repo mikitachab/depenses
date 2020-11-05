@@ -28,7 +28,11 @@ class Member(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.name
+        return self.name + " " + str(self.room)
+
+    def clean(self):
+        if self.name == "":
+            raise ValidationError("member name can't be empty")
 
     class Meta:
         unique_together = [("room", "user"), ("room", "name")]
@@ -85,7 +89,14 @@ class Settlement(models.Model):
         return str(self.member)
 
     def clean(self):
+        if self.member == self.settlement_with_member:
+            raise ValidationError("Can't settlement with same member")
         if self.member not in self.room.member_set.all():
             raise ValidationError("member is not part of a room")
         if self.settlement_with_member not in self.room.member_set.all():
             raise ValidationError("settlement_with_member is not part of a room")
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(check=~Q(member_id=F("settlement_with_member_id")), name="not_with_same_member")
+        ]
