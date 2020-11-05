@@ -7,21 +7,33 @@ class RestApiWrapper:
         return self.client.user
 
     def get_room_state(self, room_id):
-        url = _make_api_url(f"room/{room_id}/state")
-        return self.client.get(url).json()
+        return self.make_get_request(f"room/{room_id}/state")
 
     def get_room_history(self, room_id):
-        url = _make_api_url(f"room/{room_id}/history")
-        return self.client.get(url).json()
+        return self.make_get_request(f"room/{room_id}/history")
+
+    def get_rooms_of_user(self):
+        return self.make_get_request("users/rooms")
+
+    def user_create_room(self, data):
+        return self.make_post_request("users/rooms", **data)
+
+    def make_get_request(self, endpoint):
+        url = _make_api_url(endpoint)
+        return self.client.get(url)
+
+    def make_post_request(self, endpoint, **kwargs):
+        url = _make_api_url(endpoint)
+        return self.client.post(url, data=dict(**kwargs))
 
     def __getattr__(self, name):
         endpoint = _make_endpoint(name)
 
         if name.startswith("create_"):
-            return lambda **kwargs: self.client.post(_make_api_url(endpoint), data=dict(**kwargs))
+            return lambda **kwargs: self.make_post_request(endpoint, **kwargs)
 
         if name.startswith("get_"):
-            return lambda: self.client.get(_make_api_url(endpoint))
+            return lambda: self.make_get_request(endpoint)
 
         raise AttributeError(name)
 

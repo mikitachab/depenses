@@ -12,7 +12,7 @@ def test_can_get_room_state(logged_in_api_client, django_user_model, room):
     logged_in_api_client.create_spending(title="test", amount=10, member=member_2_id, room=1)
 
     room_state = logged_in_api_client.get_room_state(room_id=1)
-    assert room_state == {"test_1": {"test_2": 0.0}, "test_2": {"test_1": 15.0}}
+    assert room_state.json() == {"test_1": {"test_2": 0.0}, "test_2": {"test_1": 15.0}}
 
 
 def test_can_get_room_state_one_spending(logged_in_api_client, django_user_model, room):
@@ -27,7 +27,7 @@ def test_can_get_room_state_one_spending(logged_in_api_client, django_user_model
     logged_in_api_client.create_spending(title="test", amount=10, member=member_2_id, room=1)
 
     room_state = logged_in_api_client.get_room_state(room_id=1)
-    assert room_state == {"test_1": {"test_2": 5.0}, "test_2": {"test_1": 0.0}}
+    assert room_state.json() == {"test_1": {"test_2": 5.0}, "test_2": {"test_1": 0.0}}
 
 
 def test_can_get_room_history(logged_in_api_client, django_user_model, room):
@@ -62,4 +62,4 @@ def test_can_get_room_history(logged_in_api_client, django_user_model, room):
 
     expected_history = [settlement_data, dept_data, spending_data]
     history = logged_in_api_client.get_room_history(room_id=1)
-    assert history == expected_history
+    assert history.json() == expected_history

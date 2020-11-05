@@ -1,18 +1,21 @@
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.parsers import JSONParser
+from rest_framework.parsers import JSONParser, FormParser, MultiPartParser
 
 from spendings import serializers, models
 
 
 class UserRoomsViewSet(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
-    parser_classes = [JSONParser]
+    parser_classes = [
+        JSONParser,
+        FormParser,
+        MultiPartParser
+    ]
 
     def get(self, request, *args, **kwargs):
-        rooms = [m.room for m in request.user.member_set.all()]
-        return Response([serializers.RoomSerializer(room).data for room in rooms])
+        return Response([serializers.RoomSerializer(m.room).data for m in request.user.member_set.all()])
 
     def post(self, request, *args, **kwargs):
         room = serializers.RoomSerializer(data=request.data)
