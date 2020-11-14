@@ -98,7 +98,17 @@ if DEBUG:
             "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
         }
     }
-
+else:
+    db_settings = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.getenv("POSTGRESQL_NAME"),
+            'USER': os.getenv("POSTGRESQL_USER"),
+            'PASSWORD': os.getenv("POSTGRESQL_PASSWORD"),
+            'HOST': os.getenv("POSTGRESQL_HOST"),
+            'PORT':  os.getenv("POSTGRESQL_PORT"),
+        }
+    }
 
 DATABASES = db_settings
 
