@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "spendings",
     "users",
+    "frontendapp",
 ]
 
 REST_FRAMEWORK = {

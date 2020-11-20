@@ -17,13 +17,14 @@ from django.contrib import admin
 from django.urls import path, include
 
 from users.api import UserRoomsViewSet
+from frontendapp.views import serve_react_app
 
 from .api import router
 
 
 urlpatterns = [
+    path("", serve_react_app),
     path("admin/", admin.site.urls),
-    path("", include("spendings.urls")),
     path("api/v1/room/", include("spendings.room_api.urls")),
     path("api/v1/", include(router.urls)),
     path("api/v1/users/rooms/", UserRoomsViewSet.as_view()),
