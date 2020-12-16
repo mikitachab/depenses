@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Login from './Login';
-import MainPage from './MainPage';
+import SignIn from './components/auth/SignIn';
+import SignUp from './components/auth/SignUp';
+import MainPage from './components/mainpage/MainPage';
 import './styles/main.scss';
 
 class App extends React.Component {
@@ -10,7 +11,8 @@ class App extends React.Component {
       <Router>
         <Switch>
           <Route path='/' exact component={MainPage} />
-          <Route path='/login' component={Login} />
+          <Route path='/signin' component={SignIn} />
+          <Route path='/signup' component={SignUp} />
         </Switch>
       </Router>
     );

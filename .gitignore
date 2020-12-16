@@ -5,3 +5,4 @@ depenses.egg-info/
 .pytest_cache/
 *.sw[op]
 *.sqlite3
+__pycache__

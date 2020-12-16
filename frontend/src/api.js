@@ -13,28 +13,8 @@ class DepensesApi {
         return `${this.apiUrl}${endpoint}/`
     }
 
-    async makeApiGetRequest(endpoint) {
-        const response = await axios.get(this.makeEndpointUrl(),
-            {
-                headers: {
-                    Authorization: `Token ${this.getToken()}`
-                }
-            });
-        return response;
-    }
-
-    async getHistoryData(roomId) {
-        const response = await axios.get(`${this.apiUrl}room/${roomId}/history/`,
-            {
-                headers: {
-                    Authorization: `Token ${this.getToken()}`
-                }
-            });
-        return response;
-    }
-
-    async getActualUserName(roomId) {
-        const response = await axios.get(`${this.apiUrl}room/${roomId}/me/`,
+    async makeRoomEndpointRequest(endpoint, roomId) {
+        const response = await axios.get(`${this.apiUrl}room/${roomId}/${endpoint}/`,
             {
                 headers: {
                     Authorization: `Token ${this.getToken()}`
@@ -52,26 +32,6 @@ class DepensesApi {
             }
         )
         return response;
-    }
-
-    async getResponseMembers(roomId) {
-        const responseMembers = await axios.get(`${this.apiUrl}room/${roomId}/members/`,
-            {
-                headers: {
-                    Authorization: `Token ${this.getToken()}`
-                }
-            })
-        return responseMembers;
-    }
-
-    async getResponseState(roomId) {
-        const responseState = await axios.get(`${this.apiUrl}room/${roomId}/state/`,
-            {
-                headers: {
-                    Authorization: `Token ${this.getToken()}`
-                }
-            })
-        return responseState;
     }
 }
 export default DepensesApi

@@ -1,10 +1,10 @@
 import React from 'react';
-import History from './components/mainpage/History';
-import NavBarComponent from './components/mainpage/NavBarComponent';
-import AddNewExpanseOrDebt from './components/mainpage/AddNewExpanseOrDebt';
-import Cards from './components/mainpage/Cards';
-import Error from './Error';
-import DepensesApi from './api';
+import History from './History';
+import NavBarComponent from './NavBarComponent';
+import AddNewExpanseOrDebt from './AddNewExpanseOrDebt';
+import Cards from './Cards';
+import Error from '../../Error';
+import DepensesApi from '../../api';
 
 
 class MainPage extends React.Component {
@@ -27,43 +27,30 @@ class MainPage extends React.Component {
             selectedSettlementMember: {}
 
         }
-        this.onInputExpanseChange = this.onInputExpanseChange.bind(this);
-        this.onSelectChange = this.onSelectChange.bind(this);
-        this.getDate = this.getDate.bind(this);
-        this.getToken = this.getToken.bind(this);
-        this.onMakeExpense = this.onMakeExpense.bind(this);
-        this.onMakeDebt = this.onMakeDebt.bind(this);
-        this.onMakeSettlement = this.onMakeSettlement.bind(this);
-        this.updateResponseState = this.updateResponseState.bind(this);
-        this.onSelectDebtUserChange = this.onSelectDebtUserChange.bind(this);
-        this.onSelectSettlementUserChange = this.onSelectSettlementUserChange.bind(this);
-        this.getMemberNameById = this.getMemberNameById.bind(this);
-        this.onInputDescriptionExpanseChange = this.onInputDescriptionExpanseChange.bind(this);
-        this.onInputDescriptionDebtChange = this.onInputDescriptionDebtChange.bind(this);
         this.api = new DepensesApi();
     }
 
-    onInputExpanseChange(e) {
+    onInputExpanseChange = (e) => {
         let newExpansesEl = parseInt(e.target.value);
         this.setState({ inputExpanse: newExpansesEl });
     }
 
-    onInputDescriptionExpanseChange(e) {
+    onInputDescriptionExpanseChange = (e) => {
         let newExpansesEl = e.target.value;
         this.setState({ inputDescriptionExpanse: newExpansesEl });
     }
 
-    onInputDescriptionDebtChange(e) {
+    onInputDescriptionDebtChange = (e) => {
         let newExpansesEl = e.target.value;
         this.setState({ inputDescriptionDebt: newExpansesEl });
     }
 
-    onSelectChange(e) {
+    onSelectChange = (e) => {
         let newSelectValue = e.target.value;
         this.setState({ selectValue: newSelectValue });
     }
 
-    onSelectDebtUserChange(e) {
+    onSelectDebtUserChange = (e) => {
         let newSelectValue = e.target.value;
         this.setState({
             selectedDebtMemberId: newSelectValue.id,
@@ -71,11 +58,11 @@ class MainPage extends React.Component {
         });
     }
 
-    getMemberNameById(memberId) {
+    getMemberNameById = (memberId) => {
         return this.state.roomMembers.filter(member => member.id === memberId)[0];
     }
 
-    onSelectSettlementUserChange(e) {
+    onSelectSettlementUserChange = (e) => {
         const selectedMemberId = parseInt(e.target.value);
         const selectedMember = this.getMemberNameById(selectedMemberId);
 
@@ -84,11 +71,7 @@ class MainPage extends React.Component {
         });
     }
 
-    getToken() {
-        return window.localStorage.getItem('x-auth-token')
-    }
-
-    async onMakeSettlement(e) {
+    onMakeSettlement = async (e) => {
         e.preventDefault();
 
         const response = await this.api.makeApiPostRequest("settlements", {
@@ -111,8 +94,7 @@ class MainPage extends React.Component {
 
         this.updateResponseState()
     }
-
-    async onMakeDebt(e) {
+    onMakeDebt = async (e) => {
         e.preventDefault();
         const response = await this.api.makeApiPostRequest("depts", {
             title: this.state.inputDescriptionDebt,
@@ -139,7 +121,7 @@ class MainPage extends React.Component {
         this.updateResponseState()
     }
 
-    async onMakeExpense(e) {
+    onMakeExpense = async (e) => {
         const response = await this.api.makeApiPostRequest("spendings", {
             amount: this.state.inputExpanse,
             title: this.state.inputDescriptionExpanse,
@@ -159,14 +141,14 @@ class MainPage extends React.Component {
         this.updateResponseState()
     }
 
-    async componentDidMount() {
+    componentDidMount = async () => {
         this.updateResponseState();
         try {
-            const getHistoryDataResponse = await this.api.getHistoryData(1);
+            const getHistoryDataResponse = await this.api.makeRoomEndpointRequest('history', 1);
             this.setState({
                 expenseData: [...this.state.expenseData, ...getHistoryDataResponse.data]
             })
-            const getActualUserNameResponse = await this.api.getActualUserName(1);
+            const getActualUserNameResponse = await this.api.makeRoomEndpointRequest('me', 1);
             this.setState({
                 actualUser: getActualUserNameResponse.data
             })
@@ -196,14 +178,14 @@ class MainPage extends React.Component {
         })
     }
 
-    async updateResponseState() {
-        const responseMembers = await this.api.getResponseMembers(1);
-        const responseState = await this.api.getResponseState(1);
+    updateResponseState = async () => {
+        const responseMembers = await this.api.makeRoomEndpointRequest('members', 1);
+        const responseState = await this.api.makeRoomEndpointRequest('state', 1);
         this.setState({ roomMembers: responseMembers.data, roomState: responseState.data });
     }
 
 
-    getDate(date) {
+    getDate = (date) => {
         var newDate = new Date(date);
         var day = newDate.getDate().toString();
         var month = newDate.getMonth().toString();

@@ -2,7 +2,7 @@ import React from 'react';
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 
-class Login extends React.Component {
+class SignIn extends React.Component {
     constructor() {
         super();
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
@@ -50,7 +50,7 @@ class Login extends React.Component {
                 <div className="container">
                     <div className="row">
                         <div className="card">
-                            <h1 className="text-center">Sing In</h1>
+                            <h1 className="text-center">SingIn</h1>
                             <div className="card-body">
                                 <form className="text-center" action="#!" onSubmit={this.handleSubmit}>
                                     <div className="md-form">
@@ -60,11 +60,11 @@ class Login extends React.Component {
                                         <input type="password" id="input-password" className="form-control" placeholder="Password" value={this.state.inputPassword} onChange={this.handlePasswordChange} />
                                     </div>
 
-                                    <div className="d-flex justify-content-between">
+                                    <div className="form-footer">
                                         <div>
                                             <div className="form-check">
                                                 <input type="checkbox" className="form-check-input" id="materialLoginFormRemember" />
-                                                <label className="form-check-label" for="materialLoginFormRemember">Remember me</label>
+                                                <label className="form-check-label" htmlFor="materialLoginFormRemember">Remember me</label>
                                             </div>
                                         </div>
                                         <div>
@@ -72,10 +72,10 @@ class Login extends React.Component {
                                         </div>
                                     </div>
 
-                                    <button href="/" className="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">Sign in</button>
+                                    <button href="/" className="btn btn-dark btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">SignIn</button>
 
                                     <p>Not a member?
-                                        <a href="/">
+                                        <a href="/signup">
                                             Register
                                         </a>
                                     </p>
@@ -91,4 +91,4 @@ class Login extends React.Component {
 
 
 
-export default Login;
+export default SignIn;

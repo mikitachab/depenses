@@ -2,23 +2,19 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import DebtsDataOnCard from './DebtsDataOnCard'
 
-class CardWithExpenses extends React.Component {
-
-    render() {
-        return (
-            <Card className="card-item">
-                <Card.Body>
-                    <Card.Title>{this.props.member.name}</Card.Title>
-                    {Object.keys(this.props.debt).map((memberName, i) => {
-                        return (
-                            < DebtsDataOnCard name={memberName} amount={this.props.debt[memberName]} key={i} />
-                        )
-                    })}
-                </Card.Body>
-            </Card >
-        )
-    }
-
+function CardWithExpenses(props) {
+    return (
+        <Card className="card-item">
+            <Card.Body>
+                <Card.Title>{props.member.name}</Card.Title>
+                {Object.keys(props.debt).map((memberName, i) => {
+                    return (
+                        < DebtsDataOnCard name={memberName} amount={props.debt[memberName]} key={i} />
+                    )
+                })}
+            </Card.Body>
+        </Card >
+    )
 }
 
 

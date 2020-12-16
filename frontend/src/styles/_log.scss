@@ -1,0 +1,54 @@
+.login{
+    background: linear-gradient(108deg, #caa810 3%,#e7ce5ec9 96%);
+    padding: 1em;
+    min-height: 100vh;
+    .card{
+        min-width: 100% !important;
+        border: 0;
+        width: 500px;
+        padding: 30px;
+        .form-footer{
+            display: flex;
+            justify-content: space-between;
+        }
+        h1{
+            text-transform: uppercase;
+            font-weight: 200;
+        }
+        .md-form {
+            input{
+                margin: 1em 0;
+                font-weight: 200;
+                height: 50px;
+            }
+        }
+        button{
+            text-transform: uppercase;
+            font-size: 20px;
+            font-weight: 200;
+            height: 50px;
+        }
+        p{
+            display: flex;
+            justify-content: space-between;
+        }
+        a{
+            color: #777;
+            font-weight: 600;
+        }
+    }
+}
+
+@media (max-width: 550px){
+    .login{
+        .card{
+            width: 100vw;
+            padding: 0;
+            .form-footer{
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    }
+}
+  

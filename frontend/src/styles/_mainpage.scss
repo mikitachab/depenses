@@ -96,8 +96,7 @@
       min-width: 700px;
       max-height: 70vh;
       .history-item{
-        display: grid;
-        // grid-template-rows: 30px auto auto 50px;  
+        display: grid; 
         grid-template-columns: 100px 300px 200px 100px;
         border-right: 0;
         border-left: 0;
@@ -159,5 +158,157 @@
       background-color: #f8f9fa;
       padding: .5em 0;
       }
+  }
+}
+
+@media (max-width: 700px){
+  .mainpage{
+    display: flex;
+    flex-direction: column;
+    .row-mainpage{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 1em 0;
+      .content-row{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .card-item{
+          margin: 1em 0;
+          display: flex;
+          align-items: flex-start;
+          min-width: 92vw !important;
+        }
+      .row{
+        flex-direction: column;
+        width: 92vw;
+      }
+      .settlements{
+        position: absolute;
+        right: 80px;
+        top: 80px;
+      }
+      h1{
+        font-size: 17px;
+        font-weight: 200;
+        width: 92vw;
+      }
+      .card-expenses{
+        width: 92vw;
+      }
+      .add-new-expense {
+        min-width: 92vw;
+        form{
+          display: flex;
+          margin-top: 1em;
+          width: 92vw;
+          input, button, select{
+            flex-grow: 1 !important; 
+          }
+        }
+      }
+      .card-item{
+        width: 92vw;
+        .card-body{
+          width: 92vw;
+          align-items: flex-start;
+        }
+        .card-title{
+          text-align: left;
+          text-transform: uppercase;
+          margin: 0;
+          font-weight: 200;
+        }
+        .card-text{
+          font-weight: 400;
+          text-transform: uppercase;
+        }
+        .form-group{
+          display: flex;
+          justify-content: space-between;
+          input{
+            width: 250px;
+          }
+          button{
+            width: 120px;
+          }
+        }
+        p{
+          font-weight: 600;
+          text-align: left;
+          font-size: 17px;
+        }
+      }
+      }
+      .history{
+        margin: 1em 0;
+        overflow: auto;
+        min-width: 92vw;
+        max-height: 70vh;
+        .history-item{
+          display: flex; 
+          justify-content: space-between;
+          border-right: 0;
+          border-left: 0;
+          padding: 1em 1em 1em 0;
+          div{
+            &:last-child{
+            text-align: right;
+            }
+            &:first-child{
+              flex-basis: 70px;
+            }
+          }
+          p{
+            margin: 0;
+          }
+        }
+        .history-item-expanse{
+          background-color: rgba(221, 95, 86, 0.308);
+        }
+        .history-item-debt{
+          background-color: #eed97d49;
+        }
+        .history-item-settlement{
+          background-color: rgba(39, 182, 63, 0.123);
+          align-items: center;
+        }
+        &::-webkit-scrollbar {
+          width: .5em;
+        }
+         
+        &::-webkit-scrollbar-track {
+          box-shadow: inset 0 0 6px rgba(146, 146, 146, 0.3);
+        }
+         
+        &::-webkit-scrollbar-thumb {
+          background-color: #818c9654;
+          outline: 1px solid rgb(47, 52, 58);
+        }
+      }
+      .add-new-expense{
+        margin: 1em 0;
+        form{
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+        }
+        select, input, button{
+          height: 50px;
+          margin-right: 15px;
+        }
+        button{
+          margin: 0 !important;
+        }
+      }
+      &:first-child{
+        background-color: #ebcd4b;
+        }
+      &:nth-child(2){
+        background-color: #f8f9fa;
+        padding: .5em 0;
+        }
+    }
   }
 }
