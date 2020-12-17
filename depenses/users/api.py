@@ -13,6 +13,8 @@ class UserRoomsViewSet(generics.GenericAPIView):
         FormParser,
         MultiPartParser
     ]
+    serializer_class = serializers.RoomSerializer
+    queryset = models.Room.objects.all()
 
     def get(self, request, *args, **kwargs):
         return Response([serializers.RoomSerializer(m.room).data for m in request.user.member_set.all()])
