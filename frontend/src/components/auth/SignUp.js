@@ -1,16 +1,21 @@
 import React from 'react';
 import axios from "axios";
 import { Redirect } from "react-router-dom";
+import SuccessSignedUp from './SuccessSignedUp';
 
 class SignUp extends React.Component {
     constructor() {
         super();
+        this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
             userName: "",
             email: "",
             password: "",
             confirmPassword: "",
-            validatePassword: false
+            errorMessageEmail: "",
+            errorMessagePassword: "",
+            validatePassword: false,
+            succeedSingUp: false
         };
         this.userNameRef = React.createRef();
         this.userEmailRef = React.createRef();
@@ -52,21 +57,33 @@ class SignUp extends React.Component {
         );
     }
 
-    handleSubmit = (e) => {
+    handleSubmit = async (e) => {
         e.preventDefault();
+        this.setState({ errorMessageEmail: '', errorMessagePassword: '' });
 
-        axios.post('http://127.0.0.1:8000/api/auth/users/',
-            {
-                username: this.state.userName,
-                email: this.state.email,
-                password: this.state.password
-            }).then(response => {
-                console.log(response);
-                if (response.status === 200) {
-                    console.log(response);
-                    this.setState({ redirect: '/Login' })
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/api/auth/users/',
+                {
+                    username: this.state.userName,
+                    email: this.state.email,
+                    password: this.state.password
+                })
+            if (response.status === 201) {
+                this.setState({ succeedSingUp: true })
+            }
+        } catch (error) {
+            let arr = Object.entries(error.response.data);
+            arr.map(el => {
+                console.log(el);
+                console.log(arr);
+                console.log(el[1]);
+                if (el[0] === 'email') {
+                    this.setState({ errorMessageEmail: el[1] });
+                } else if (el[0] === 'password') {
+                    this.setState({ errorMessagePassword: el[1] })
                 }
             })
+        }
     }
 
     render() {
@@ -74,52 +91,61 @@ class SignUp extends React.Component {
             return <Redirect to={this.state.redirect} />
         }
         return (
-            <div className="container-fluid login">
-                <div className="container">
-                    <div className="row">
-                        <div className="card">
-                            <h1 className="text-center">SingUp</h1>
-                            <div className="card-body">
-                                <form className="text-center" action="#!" onSubmit={this.handleSubmit}>
-                                    <div className="md-form">
-                                        <input ref={this.userNameRef}
-                                            onChange={this.handleUserNameChange}
-                                            id="input-name" className="form-control" placeholder="Name" />
-                                    </div>
-                                    <div className="md-form">
-                                        <input ref={this.userEmailRef}
-                                            onChange={this.handleEmailChange}
-                                            id="input-email" className="form-control" placeholder="E-mail" />
-                                    </div>
-                                    <div className="md-form">
-                                        <input ref={this.userPasswordRef}
-                                            onChange={this.handlePasswordChange}
-                                            type="password" id="input-password" className="form-control" placeholder="Password" />
-                                    </div>
-                                    <div className="md-form">
-                                        <input ref={this.userPasswordConfirmedRef}
-                                            onChange={this.handlePasswordConfirmedChange}
-                                            type="password" id="input-password" className="form-control" placeholder="Confirm Password" />
+            <div>
+                {
+                    this.state.succeedSingUp ? <SuccessSignedUp /> :
+                        <div className="container-fluid login">
+                            <div className="container">
+                                <div className="row">
+                                    <div className="card">
+                                        <h1 className="text-center">SingUp</h1>
+                                        <div className="card-body">
+                                            <form className="text-center" onSubmit={this.handleSubmit}>
+                                                <div className="md-form">
+                                                    <input ref={this.userNameRef}
+                                                        onChange={this.handleUserNameChange}
+                                                        id="input-name" className="form-control" placeholder="Name" />
+                                                </div>
+                                                <div className="md-form">
+                                                    <input ref={this.userEmailRef}
+                                                        onChange={this.handleEmailChange}
+                                                        id="input-email" className="form-control" placeholder="E-mail" />
+                                                    {this.state.errorMessageEmail ? (<div className="error-text">{this.state.errorMessageEmail}</div>) : ""}
+                                                </div>
+                                                <div className="md-form">
+                                                    <input ref={this.userPasswordRef}
+                                                        onChange={this.handlePasswordChange}
+                                                        type="password" id="input-password" className="form-control" placeholder="Password" />
+                                                    {this.state.errorMessagePassword ? (<div className="error-text">{this.state.errorMessagePassword}</div>) : ""}
+                                                </div>
+                                                <div className="md-form">
+                                                    <input ref={this.userPasswordConfirmedRef}
+                                                        onChange={this.handlePasswordConfirmedChange}
+                                                        type="password" id="input-password" className="form-control" placeholder="Confirm Password" />
+                                                </div>
+
+                                                <button
+                                                    href="/"
+                                                    className="btn btn-dark btn-rounded btn-block my-4 waves-effect z-depth-0"
+                                                    type="submit"
+                                                    disabled={!this.validateForm()}
+                                                >
+                                                    SignUp
+                                                </button>
+
+                                                <p>Do you have an account?
+                                                    <a href="/signin">
+                                                        Log in
+                                                    </a>
+                                                </p>
+                                            </form>
+                                        </div>
                                     </div>
 
-                                    <button
-                                        href="/"
-                                        className="btn btn-dark btn-rounded btn-block my-4 waves-effect z-depth-0"
-                                        type="submit"
-                                        disabled={!this.validateForm()}>
-                                        SignUp
-                                    </button>
 
-                                    <p>Do you have an account?
-                                        <a href="/signin">
-                                            Log in
-                                        </a>
-                                    </p>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div >
+                                </div>
+                            </div >
+                        </div>}
             </div>
         );
     }

@@ -39,6 +39,17 @@
     }
 }
 
+.succeed-signup{
+    height: 100vh;
+    a{
+        color: #CCAB16;
+        &:hover{
+            text-decoration: none;
+            color: #E8D374;
+        }
+    }
+}
+
 @media (max-width: 550px){
     .login{
         .card{

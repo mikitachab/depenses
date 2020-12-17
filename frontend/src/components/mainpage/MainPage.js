@@ -2,6 +2,7 @@ import React from 'react';
 import History from './History';
 import NavBarComponent from './NavBarComponent';
 import AddNewExpanseOrDebt from './AddNewExpanseOrDebt';
+import CreateRoom from './CreateRoom';
 import Cards from './Cards';
 import Error from '../../Error';
 import DepensesApi from '../../api';
@@ -154,6 +155,7 @@ class MainPage extends React.Component {
             })
         }
         catch (err) {
+            console.log(err.response.data.detail);
             if (!err.response) {
                 this.setState({ error: 'Unknown error' });
                 console.log('Unknown error');
@@ -207,6 +209,7 @@ class MainPage extends React.Component {
                             </div>
                         </div>
                     </div>
+                    <CreateRoom />
                     <div className="row-mainpage">
                         <div className="content-row container">
                             <AddNewExpanseOrDebt value={this.state.selectValue}
