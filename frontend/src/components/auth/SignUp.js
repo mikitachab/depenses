@@ -6,7 +6,6 @@ import SuccessSignedUp from './SuccessSignedUp';
 class SignUp extends React.Component {
     constructor() {
         super();
-        this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
             userName: "",
             email: "",
@@ -47,9 +46,9 @@ class SignUp extends React.Component {
 
     validateForm = () => {
         if (this.state.password !== this.state.confirmPassword) {
-            this.state.validatePassword = false;
+            this.setState({ validatePassword: false })
         } else if (this.state.password === this.state.confirmPassword) {
-            this.state.validatePassword = true;
+            this.setState({ validatePassword: true })
         }
         return (
             this.state.userName.length > 0 &&
@@ -75,9 +74,6 @@ class SignUp extends React.Component {
         } catch (error) {
             let arr = Object.entries(error.response.data);
             arr.map(el => {
-                console.log(el);
-                console.log(arr);
-                console.log(el[1]);
                 if (el[0] === 'email') {
                     this.setState({ errorMessageEmail: el[1] });
                 } else if (el[0] === 'password') {
@@ -133,7 +129,7 @@ class SignUp extends React.Component {
                                                     href="/"
                                                     className="btn btn-dark btn-rounded btn-block my-4 waves-effect z-depth-0"
                                                     type="submit"
-                                                    disabled={!this.validateForm()}
+                                                    disabled={!this.validateForm}
                                                 >
                                                     SignUp
                                                 </button>

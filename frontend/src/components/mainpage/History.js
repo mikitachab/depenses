@@ -42,6 +42,7 @@ class History extends React.Component {
                                                 description={el.title}
                                             />
                                         )
+
                                 }
                             })()}
                         </div>

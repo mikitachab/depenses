@@ -13,6 +13,29 @@ class DepensesApi {
         return `${this.apiUrl}${endpoint}/`
     }
 
+    async makeRoomMemberGetRequest(endpoint) {
+        const response = await axios.get(`${this.apiUrl}${endpoint}`,
+            {
+                headers: {
+                    Authorization: `Token ${this.getToken()}`
+                }
+            });
+        return response;
+    }
+
+
+    async makeRoomMemberPostRequest(endpoint) {
+        const response = await axios.post(`${this.apiUrl}${endpoint}`,
+            data,
+            {
+                headers: {
+                    Authorization: `Token ${this.getToken()}`
+                }
+            });
+        return response;
+    }
+
+
     async makeRoomEndpointRequest(endpoint, roomId) {
         const response = await axios.get(`${this.apiUrl}room/${roomId}/${endpoint}/`,
             {
@@ -33,5 +56,7 @@ class DepensesApi {
         )
         return response;
     }
+
+
 }
 export default DepensesApi

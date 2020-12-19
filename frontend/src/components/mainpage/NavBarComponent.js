@@ -10,7 +10,6 @@ function NavBarComponent(props) {
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ml-auto">
                     <Nav.Link href="/signup">Log out</Nav.Link>
-                    <Nav.Link href="#link">Settings</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>

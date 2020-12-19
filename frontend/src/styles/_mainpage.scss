@@ -161,11 +161,30 @@
   }
 
   .create-room{
-    height: 200px;
+    height: 300px;
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: flex-end;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .room-details{
+    text-transform: uppercase;
+    font-weight: 500;
+    .room-item{
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid rgb(96, 94, 94);
+      border-radius: 10px;
+      padding: 10px 5px;
+      margin: 5px 0;
+      p{
+        margin: 0;
+      }
+    }
   }
 }
 
