@@ -14,6 +14,7 @@ class SignUp extends React.Component {
             confirmPassword: "",
             errorMessageEmail: "",
             errorMessagePassword: "",
+            errorMessageUsername: "",
             validatePassword: false,
             succeedSingUp: false
         };
@@ -81,6 +82,8 @@ class SignUp extends React.Component {
                     this.setState({ errorMessageEmail: el[1] });
                 } else if (el[0] === 'password') {
                     this.setState({ errorMessagePassword: el[1] })
+                } else if (el[0] === 'username') {
+                    this.setState({ errorMessageUsername: el[1] })
                 }
             })
         }
@@ -105,6 +108,8 @@ class SignUp extends React.Component {
                                                     <input ref={this.userNameRef}
                                                         onChange={this.handleUserNameChange}
                                                         id="input-name" className="form-control" placeholder="Name" />
+                                                    {this.state.errorMessageUsername ? (<div className="error-text">{this.state.errorMessageUsername}</div>) : ""}
+
                                                 </div>
                                                 <div className="md-form">
                                                     <input ref={this.userEmailRef}
