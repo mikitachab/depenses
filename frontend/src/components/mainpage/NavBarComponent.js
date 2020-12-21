@@ -1,8 +1,8 @@
 import React from 'react';
-import { Navbar, Nav, NavDropdown, Form, FormControl, Button } from 'react-bootstrap';
+import { Navbar, Nav } from 'react-bootstrap';
 
 
-function NavBarComponent(props) {
+function NavBarComponent() {
     return (
         <Navbar className="navbar" bg="light" expand="lg">
             <Navbar.Brand href="#home">Keep Budget</Navbar.Brand>

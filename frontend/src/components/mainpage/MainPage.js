@@ -5,9 +5,8 @@ import AddNewExpanseOrDebt from './AddNewExpanseOrDebt';
 import Cards from './Cards';
 import Error from '../../Error';
 import DepensesApi from '../../api';
+import Axios from 'axios';
 
-
-import axios from 'axios';
 class MainPage extends React.Component {
     constructor() {
         super();
@@ -36,45 +35,49 @@ class MainPage extends React.Component {
         }
         this.api = new DepensesApi();
         this.roomNameRef = React.createRef();
+        this.roomNameMemberRef = React.createRef();
     }
     chooseRoom = (room) => {
-        console.log(room.id);
         this.setState({
             selectedRoom: room,
             roomId: room.id,
             roomName: room.name,
             currency: room.currency
         });
-        console.log(this.state.roomId);
+
+        localStorage.setItem('selectedRoom', JSON.stringify(room));
+        this.getRoomMemberData();
+    }
+
+    getRoomMemberDataMultiRoom = () => {
+        let selectedRoom = JSON.parse(window.localStorage.getItem('selectedRoom'));
+        this.setState({
+            roomId: selectedRoom.id,
+            roomName: selectedRoom.name,
+            currency: selectedRoom.currency
+        });
+        this.uploadInfoAboutRoomMember();
     }
 
     getRoomMemberData = async () => {
         try {
-            const response = await this.api.makeRoomMemberRequest('users/rooms/');
-            if (response.data.length !== 0 && Object.keys(this.state.selectedRoom).length === 0) {
+            const response = await this.api.makeRoomMemberGetRequest('users/rooms');
+            if (response.data.length <= 1) {
                 console.log('take first el');
                 this.setState({
                     requiresCreateRoom: true,
                     roomName: response.data[0].name,
                     currency: response.data[0].currency,
-                    roomId: response.data[0].id
-                })
-            } else if (Object.keys(this.state.selectedRoom).length >= 1) {
-                console.log('seco');
-                this.setState({
-                    roomId: this.state.selectedRoom.id,
-                    roomName: this.state.selectedRoom.name,
-                    currency: this.state.selectedRoom.currency
+                    roomId: response.data[0].id,
+                    arrayWithAllRooms: response.data
                 });
+                this.uploadInfoAboutRoomMember();
+
+            } else if (window.localStorage.getItem('selectedRoom')) {
+                this.setState({ arrayWithAllRooms: response.data });
+                this.getRoomMemberDataMultiRoom();
+                console.log(response.data)
             }
-
-
-            console.log(this.state.roomId);
-
-
-            this.setState({ arrayWithAllRooms: response.data });
-
-            console.log(this.state.arrayWithAllRooms)
         } catch (error) {
             console.log(error);
         }
@@ -82,10 +85,6 @@ class MainPage extends React.Component {
 
     getToken() {
         return window.localStorage.getItem('x-auth-token')
-    }
-
-    onHandleChange = (e) => {
-
     }
 
     onInputExpanseChange = (e) => {
@@ -133,14 +132,13 @@ class MainPage extends React.Component {
     onMakeSettlement = async (e) => {
         e.preventDefault();
 
-        const response = await this.api.makeApiPostRequest("settlements", {
+        await this.api.makeApiPostRequest("settlements", {
             member: this.state.actualUser.id,
             member_name: this.state.selectedSettlementMember.name,
             settlement_with_member: this.state.selectedSettlementMember.id,
             settlement_with_member_name: this.state.selectedSettlementMember.name,
             room: this.state.roomId
-        })
-        console.log(response.data)
+        });
 
         this.setState({
             expenseData: [{
@@ -149,7 +147,7 @@ class MainPage extends React.Component {
                 settlement_with_member: this.state.selectedSettlementMember.name,
                 settlement_with_member_name: this.state.selectedSettlementMember.name,
                 settlement: true,
-                date: new Date,
+                date: new Date(),
                 type: 'settlement'
             }, ...this.state.expenseData]
         })
@@ -158,7 +156,7 @@ class MainPage extends React.Component {
     }
     onMakeDebt = async (e) => {
         e.preventDefault();
-        const response = await this.api.makeApiPostRequest("depts", {
+        await this.api.makeApiPostRequest("depts", {
             title: this.state.inputDescriptionDebt,
             member: parseInt(this.state.actualUser.id),
             amount: this.state.inputExpanse,
@@ -175,7 +173,7 @@ class MainPage extends React.Component {
                 from_member_name: this.state.actualUser.name,
                 to_member_name: this.state.selectedDebtMember.name,
                 title: this.state.inputDescriptionDebt,
-                date: new Date,
+                date: new Date(),
                 type: 'dept'
             },
             ...this.state.expenseData
@@ -185,7 +183,7 @@ class MainPage extends React.Component {
     }
 
     onMakeExpense = async (e) => {
-        console.log(this.state.selectedRoom.id)
+        console.log(this.state.roomId)
         const response = await this.api.makeApiPostRequest("spendings", {
             amount: this.state.inputExpanse,
             title: this.state.inputDescriptionExpanse,
@@ -193,14 +191,15 @@ class MainPage extends React.Component {
             room: this.state.roomId
         })
         console.log(response.data)
-
+        console.log(this.state.roomId)
         this.setState({
             expenseData: [{
                 amount: this.state.inputExpanse,
                 title: this.state.inputDescriptionExpanse,
                 member_name: this.state.actualUser.name,
-                date: new Date,
-                type: 'spending'
+                date: new Date(),
+                type: 'spending',
+                roomName: this.state.roomName
             }, ...this.state.expenseData]
         })
         this.updateResponseState()
@@ -208,14 +207,10 @@ class MainPage extends React.Component {
 
     uploadInfoAboutRoomMember = async () => {
         try {
-            console.log(this.state.roomId);
-            await this.getRoomMemberData();
-            await this.updateResponseState();
             const getHistoryDataResponse = await this.api.makeRoomEndpointRequest('history', this.state.roomId);
             this.setState({
                 expenseData: [...this.state.expenseData, ...getHistoryDataResponse.data]
             })
-            console.log(getHistoryDataResponse)
             const getActualUserNameResponse = await this.api.makeRoomEndpointRequest('me', this.state.roomId);
             this.setState({
                 actualUser: getActualUserNameResponse.data
@@ -235,9 +230,9 @@ class MainPage extends React.Component {
         }
     }
 
-    componentDidMount = () => {
-        this.uploadInfoAboutRoomMember();
-
+    componentDidMount = async () => {
+        await this.getRoomMemberData();
+        await this.updateResponseState();
         const roomMembersWithoutMe = this.state.roomMembers.filter((member) => {
             return member.name !== this.state.actualUser.name;
         })
@@ -252,6 +247,7 @@ class MainPage extends React.Component {
         const responseMembers = await this.api.makeRoomEndpointRequest('members', this.state.roomId);
         const responseState = await this.api.makeRoomEndpointRequest('state', this.state.roomId);
         this.setState({ roomMembers: responseMembers.data, roomState: responseState.data });
+
     }
 
 
@@ -267,10 +263,10 @@ class MainPage extends React.Component {
 
 
 
-    onHandleSubmitRoomMember = async (e) => {
+    onHandleSubmitRoom = async (e) => {
         e.preventDefault();
         try {
-            const response = await this.api.makeRoomMemberPostRequest('users/rooms/', {
+            const response = await this.api.makeRoomMemberPostRequest('users/rooms', {
                 "name": this.roomNameRef.current.value,
                 "currency": 'EUR'
             })
@@ -286,33 +282,46 @@ class MainPage extends React.Component {
         }
     }
 
+    onHandleSubmitRoomAddMember = async (e) => {
+        console.log();
+        await axios.post(`http://127.0.0.1:8000/api/v1/room/${roomId}/members/`,
+            {}
+        )
+    }
+
 
     render() {
-        let createRoom = this.state.requiresCreateRoom;
         return (
             <div>
                 <NavBarComponent />
                 <div className="container-fluid mainpage" >
                     <div className="row-mainpage">
-                        <div className="content-row container">
+                        <div className="content-row container info">
                             <div className="row">
                                 <div className="choose-create-room">
                                     <p className="text-right">
-                                        <button className="btn btn-dark" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">Choose or Create Other Room</button>
+                                        <button className="btn btn-dark" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">
+                                            Change Room
+                                        </button>
                                     </p>
-                                    <div className="row">
-                                        <div className="col">
+                                    <p className="room-name text-right">{this.state.roomName}</p>
+                                    <div className="row collapsed-row">
+                                        <div className="col-12">
                                             <div className="collapse multi-collapse" id="multiCollapseExample1">
                                                 <div className="card card-body">
                                                     <div className="create-room container" >
-                                                        <form onSubmit={this.onHandleSubmitRoomMember}>
+                                                        <form onSubmit={this.onHandleSubmitRoom}>
                                                             <p className="my-2">Please create your room and name it</p>
                                                             <input ref={this.roomNameRef} type="text" className="form-control my-2" placeholder="Create room name" />
-                                                            <input type="text" className="form-control my-2" placeholder="Add your group's member name " />
                                                             <button type="submit" className="btn btn-dark my-2">Create room</button>
                                                         </form>
+                                                        <form onSubmit={this.onHandleSubmitRoomAddMember}>
+                                                            <p className="my-2">Add a member to group</p>
+                                                            <input ref={this.roomNameMemberRef} type="text" className="form-control my-2" placeholder="Add your group's member name " />
+                                                            <button type="submit" className="btn btn-warning my-2">Add Member</button>
+                                                        </form>
                                                     </div>
-                                                    <div className="text-right room-details">
+                                                    <div className="room-details">
                                                         {this.state.arrayWithAllRooms.map((room, i) => {
                                                             return (
                                                                 <div className="room-item" key={i}>
@@ -326,10 +335,10 @@ class MainPage extends React.Component {
                                             </div>
                                         </div>
                                     </div>
+                                    <h1 className="text-center">History Spendings</h1>
+                                    <Cards roomMembers={this.state.roomMembers} roomState={this.state.roomState} />
                                 </div>
-                                <p>{this.state.roomName}</p>
-                                <h1 className="text-center">Budget in October 2020</h1>
-                                <Cards roomMembers={this.state.roomMembers} roomState={this.state.roomState} />
+
                             </div>
                         </div>
                     </div>

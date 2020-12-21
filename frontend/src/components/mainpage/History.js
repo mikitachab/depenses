@@ -19,7 +19,6 @@ class History extends React.Component {
                                             settlement={el.settlement_with_member_name}
                                             dateDetails={this.props.getDate(el.date)}
                                         />)
-                                        break;
 
                                     case 'dept':
                                         return (
@@ -32,17 +31,18 @@ class History extends React.Component {
                                                 description={el.title}
                                             />
                                         )
-                                        break;
 
                                     case 'spending':
                                         return (
                                             <HistoryItemExpense name={el.member_name}
+                                                roomName={el.roomName}
                                                 price={el.amount}
                                                 dateDetails={this.props.getDate(el.date)}
                                                 description={el.title}
                                             />
                                         )
-
+                                    default:
+                                        console.log('No such expenses options')
                                 }
                             })()}
                         </div>

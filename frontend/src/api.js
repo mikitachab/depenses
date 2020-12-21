@@ -24,9 +24,8 @@ class DepensesApi {
     }
 
 
-    async makeRoomMemberPostRequest(endpoint) {
-        const response = await axios.post(`${this.apiUrl}${endpoint}`,
-            data,
+    async makeRoomMemberPostRequest(endpoint, data) {
+        const response = await axios.post(this.makeEndpointUrl(endpoint), data,
             {
                 headers: {
                     Authorization: `Token ${this.getToken()}`

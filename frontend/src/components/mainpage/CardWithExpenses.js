@@ -8,6 +8,7 @@ function CardWithExpenses(props) {
             <Card.Body>
                 <Card.Title>{props.member.name}</Card.Title>
                 {Object.keys(props.debt).map((memberName, i) => {
+                    console.log(memberName)
                     return (
                         < DebtsDataOnCard name={memberName} amount={props.debt[memberName]} key={i} />
                     )

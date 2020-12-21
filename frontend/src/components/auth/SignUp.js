@@ -81,6 +81,7 @@ class SignUp extends React.Component {
                 } else if (el[0] === 'username') {
                     this.setState({ errorMessageUsername: el[1] })
                 }
+                return arr;
             })
         }
     }

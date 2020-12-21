@@ -18,6 +18,7 @@
 }
 
 .mainpage{
+  background-color:  #f8f9fa;
   display: flex;
   flex-direction: column;
   .row-mainpage{
@@ -57,7 +58,6 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      width: 450px;
       .card-body{
         width: 100%;
         display: flex;
@@ -161,32 +161,67 @@
   }
 
   .create-room{
-    height: 300px;
+    padding: 1em 0;
     width: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    form{
+      width: 99%;
+      button{
+        width: 100%;
+      }
+    }
   }
 
   .room-details{
+    border-radius: 10px;
     text-transform: uppercase;
     font-weight: 500;
     .room-item{
-      width: 100%;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-      border: 1px solid rgb(96, 94, 94);
-      border-radius: 10px;
-      padding: 10px 5px;
-      margin: 5px 0;
+      box-shadow: 0 0 1em rgb(209, 205, 205);
+      border-radius: 5px;
+      padding: 7px 5px;
+      margin: 10px 0;
       p{
+        text-transform: capitalize;
         margin: 0;
+        color: rgb(86, 83, 83);
       }
     }
   }
+  .info{
+    .row{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items:center;
+      .collapsed-row{
+        width: 600px;
+      }
+    }
+  }
+  .room-name{
+    margin: 1em 0;
+    text-transform: uppercase;
+    color: rgb(52, 45, 45);
+    font-weight: 600;
+  }
 }
+
+h1{
+  margin: 1em 0 !important;
+}
+
+.history-item-buyer{
+  text-transform: capitalize;
+}
+
 
 @media (max-width: 700px){
   .mainpage{
